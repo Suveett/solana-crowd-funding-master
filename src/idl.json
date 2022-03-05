@@ -1,0 +1,239 @@
+{
+  "version": "0.1.0",
+  "name": "solanacrowdfundingproject",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "writingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "writingAccountBump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "createCampaign",
+      "accounts": [
+        {
+          "name": "writingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "imageLink",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "withdraw",
+      "accounts": [
+        {
+          "name": "writingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "donate",
+      "accounts": [
+        {
+          "name": "writingAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "donatorProgramAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "donatorProgramAccountBump",
+          "type": "u8"
+        },
+        {
+          "name": "slug",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "CampaignState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "campaignDetails",
+            "type": {
+              "vec": {
+                "defined": "CampaignDetails"
+              }
+            }
+          },
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "count",
+            "type": "u8"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "withdrawRequest",
+            "type": {
+              "vec": {
+                "defined": "WithdrawRequest"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Donation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "slug",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "CampaignDetails",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "imageLink",
+            "type": "string"
+          },
+          {
+            "name": "amountDonated",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WithdrawRequest",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "admin",
+            "type": "publicKey"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "SlugTooLong",
+      "msg": "Slug cannot be more than 10 characters"
+    }
+  ],
+  "metadata": {
+    "address": "F7nnL8QeG9ELnu8CUJfQxtYaVEGTecd7ULrnV2ojxFCw"
+  }
+}
