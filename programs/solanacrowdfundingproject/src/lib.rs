@@ -158,7 +158,7 @@ pub mod solanacrowdfundingproject {
         #[account(mut)]
         pub authority : Signer<'info>,
         #[account(init,
-            seeds = [b"donate____".as_ref(), authority.key().as_ref()], 
+            seeds = [b"donate_______now!!".as_ref(), authority.key().as_ref()], 
             bump = donator_program_account_bump, 
             payer = authority, 
             space = 100)]
