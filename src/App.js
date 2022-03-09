@@ -28,17 +28,17 @@ const { SystemProgram, Keypair } = web3;
 const programID = new PublicKey(idl.metadata.address);
 
 // Set our network to devnet.
-const network = clusterApiUrl('localnet');
+const network = clusterApiUrl('devnet');
 
 // Controls how we want to acknowledge when a transaction is "done".
 const opts = {
-  preflightCommitment: "processed"
+  preflightCommitment: "confirmed"
 }
 
 // const arr = Object.values(kp._keypair.secretKey)
 // const secret = new Uint8Array(arr)
 // const writingAccount = web3.Keypair.fromSecretKey(secret)
-
+const donator = Keypair.generate();
 
 export async function createCampaign(names, description, image_link) {
   try {
@@ -81,18 +81,19 @@ export async function donateToCampaign(campaignPubKey, amount) {
   const program = new Program(idl, programID, provider);
   const { donatorProgramAccount, bump } = await getProgramDerivedCampainDonatorProgramAccountAddress();
 
-  const donateTx = await program.rpc.donate(new BN(amount), "slug", new BN(bump), {
+  const donateTx = await program.rpc.donate(new BN(amount), new BN(bump), {
     accounts: {
       writingAccount: campaignPubKey,
       authority: provider.wallet.publicKey,
       donatorProgramAccount: donatorProgramAccount,
       systemProgram: SystemProgram.programId,
-    }
+    },
+    signers : [donator],
 
   });
 
   alert("Your Donation transaction signature", donateTx);
-  let account = await program.account.donation.fetch(donatorProgramAccount);
+  let account = await program.account.donatorProgramAccount.fetch(donatorProgramAccount);
   console.log("👀 Created a New Donator Program Account : ", account);
   alert("Donation Successful");
 }
@@ -121,7 +122,7 @@ export async function withdraw(campaignPubKey, amount) {
 async function getProgramDerivedCampainWritingAccountAddress() {
   const provider = getProvider();
   const [writingAccount, bump] = await PublicKey.findProgramAddress(
-    [Buffer.from('____profit'), provider.wallet.publicKey.toBuffer()],
+    [Buffer.from('please_____'), provider.wallet.publicKey.toBuffer()],
     programID
   );
 
@@ -131,9 +132,9 @@ async function getProgramDerivedCampainWritingAccountAddress() {
 };
 
 async function getProgramDerivedCampainDonatorProgramAccountAddress() {
-  const provider = getProvider();
+  
   const [donatorProgramAccount, bump] = await PublicKey.findProgramAddress(
-    [Buffer.from('____donation'), Buffer.from('slug'), provider.wallet.publicKey.toBuffer()],
+    [Buffer.from('donate____'),  donator.publicKey.toBuffer()],
     programID
   );
   console.log(`Got ProgramDerivedDonatorProgramAccountAddress: bump: ${bump}, pubkey: ${donatorProgramAccount.toBase58()}`);
