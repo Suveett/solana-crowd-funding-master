@@ -161,7 +161,7 @@ pub mod solanacrowdfundingproject {
             seeds = [b"donate____".as_ref(), authority.key().as_ref()], 
             bump = donator_program_account_bump, 
             payer = authority, 
-            space = 1)]
+            space = 100)]
         pub donator_program_account : Account<'info, DonatorProgramAccount>,
         #[account(address = system_program::ID)]
         pub system_program : AccountInfo<'info>,
