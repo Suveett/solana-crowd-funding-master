@@ -1,13 +1,13 @@
 [features]
 seeds = false
-[programs.localnet]
+[programs.devnet]
 solanacrowdfundingproject = "F7nnL8QeG9ELnu8CUJfQxtYaVEGTecd7ULrnV2ojxFCw"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/Users/aadyakalra/.config/solana/id.json"
 
 [scripts]
