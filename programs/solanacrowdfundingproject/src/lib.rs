@@ -200,7 +200,7 @@ pub mod solanacrowdfundingproject {
     #[account]
     pub struct DonatorProgramAccount {
         pub amount_donated : u64,
-        bump : u8,
+        pub bump : u8,
     }
    
     
