@@ -5,7 +5,7 @@ const { PublicKey, Connection } = require("@solana/web3.js");
 //const cluster = "http://localhost:8899";
 const cluster = "https://api.devnet.solana.com";
 const connection = new Connection(cluster, "confirmed");
-const { SystemProgram, Keypair, SYSVAR_RENT_PUBKEY } = anchor.web3; // IF USING 
+const { SystemProgram, Keypair, /*SYSVAR_RENT_PUBKEY*/ } = anchor.web3; 
 const { Buffer } = require('buffer');
 
 
@@ -95,7 +95,10 @@ describe('Solanacrowdfundingproject', () => {
       const { writingAccount } = await getProgramDerivedCampaignWritingAccountAddress();
       const { donatorProgramAccount, bump } = await getProgramDerivedDonatorProgramAccountAddress();
       
-      // Now that the donator's writing Account is initialized, we allow the donator to make a Donation:
+      
+      let balanceOfCampaignCreator = await connection.getBalance(writingAccount);
+      console.log("Balance of Campaign before Donation : ", balanceOfCampaignCreator);
+      
       let donateTx = await program.rpc.donate(new anchor.BN(1000000), new anchor.BN(bump),
         {
           accounts: {
@@ -103,18 +106,17 @@ describe('Solanacrowdfundingproject', () => {
             authority: donator.publicKey,
             donatorProgramAccount: donatorProgramAccount,
             systemProgram: SystemProgram.programId,
-            // rent : SYSVAR_RENT_PUBKEY,
+            
            
           },
            signers: [donator],
         });
       //Asserts and Console Logs
       //Console.log the Transaction signature of the Donation procedure. 
-      let account = await program.account.campaignState.fetch(donatorProgramAccount);
+      let account = await program.account.donatorProgramAccount.fetch(donatorProgramAccount);
       console.log("👀 Created a New Donator Program Account : ", account);
       console.log("👀 Your Donation transaction signature is : ", donateTx);
-      let confirmation = await connection.confirmTransaction(donateTx);
-      console.log("👀 Donation Successfully made : ", confirmation);  
+     
       let balanceOfCampaignCreator = await connection.getBalance(writingAccount);
       console.log("Balance of Campaign after Donation : ", balanceOfCampaignCreator);
 
