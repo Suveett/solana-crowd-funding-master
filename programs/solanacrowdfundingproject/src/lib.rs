@@ -118,7 +118,7 @@ pub mod solanacrowdfundingproject {
     #[instruction(writing_account_bump : u8)]
     pub struct Initialize<'info> {
         #[account(init, 
-            seeds = [b"please_____".as_ref(), authority.key().as_ref()], 
+            seeds = [b"please_______initialise!!".as_ref(), authority.key().as_ref()], 
             bump = writing_account_bump, 
             payer = authority, 
             space = 9000)]
