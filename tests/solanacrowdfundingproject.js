@@ -131,7 +131,8 @@ describe('Solanacrowdfundingproject', () => {
   try {
     it('Can Make a Withdrawal', async () => {
       const { writingAccount } = await getProgramDerivedCampaignWritingAccountAddress();
-
+      let balanceOfCampaignCreatorPreWithdrawal = await connection.getBalance(writingAccount);
+      console.log("Balance of Campaign before Withdrawal: ", balanceOfCampaignCreatorPreWithdrawal);
       let withdrawTx = await program.rpc.withdraw(new anchor.BN(50000),
         {
           accounts: {
@@ -144,8 +145,8 @@ describe('Solanacrowdfundingproject', () => {
       //Asserts and Console Logs
       //Console.log the Transaction signature of the Withdrawal procedure.
       console.log("Your Withdrawal transaction signature", withdrawTx);
-      let balanceOfCampaignCreator = await connection.getBalance(writingAccount);
-      console.log("Balance of Campaign after Withdrawal: ", balanceOfCampaignCreator);
+      let balanceOfCampaignCreatorPostWithdrawal = await connection.getBalance(writingAccount);
+      console.log("Balance of Campaign after Withdrawal: ", balanceOfCampaignCreatorPostWithdrawal);
 
 
     });
