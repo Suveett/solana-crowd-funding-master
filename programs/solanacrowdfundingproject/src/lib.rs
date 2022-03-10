@@ -1,7 +1,7 @@
 
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::system_program;
-use anchor_lang::solana_program::program::{invoke /* , invoke_signed */};
+use anchor_lang::solana_program::program::{invoke,invoke_signed};
 use anchor_lang::solana_program::system_instruction;
 use anchor_lang::solana_program::program_error::ProgramError;
 declare_id!("HwHzMftiyTEYy6w8K6E3AipuF3vgswS1d7c6T6hUeRxf");
@@ -86,7 +86,7 @@ pub mod solanacrowdfundingproject {
         donator_program_account.amount_donated = amount;
         donator_program_account.bump = donator_program_account_bump;
         
-
+        // NOW LETS TRANSFER THE SOL FROM authority to donator_program_account
        let transfer_ix = system_instruction::transfer(
             &authority.to_account_info().key(),
             &donator_program_account.to_account_info().key(),
@@ -101,7 +101,24 @@ pub mod solanacrowdfundingproject {
                donator_program_account.to_account_info(),
            ],
        )?;
+          
+        // NOW LETS TRANSFER THE SOL FROM donator_program_account to writing_account
+        //BUT WE DONT NEED BELOW LINES OF CODE AS ANCHOR DOES THIS IN A FEW LINES FOR US 
+          /*let transfer_to_campaign_pda_ix = system_instruction::transfer(
+            &donator_program_account.to_account_info().key(),
+            &writing_account.to_account_info().key(),
+            amount,
+        );
 
+        invoke_signed(
+            &transfer_to_campaign_pda_ix,
+            &[
+                donator_program_account.to_account_info(),
+                writing_account.to_account_info(),
+            ],
+            &[&[&b"donate______buddy!!"[..], &[donator_program_account_bump]]], //Please ensure to change the seeds as per your preferrence
+        )?;*/
+        
         let mut campaign_data = CampaignDetails::try_from_slice(*writing_account.to_account_info().try_borrow_mut_data()?)
         .expect("Error deserializing data");
         campaign_data.amount_donated += **donator_program_account.to_account_info().lamports.borrow();
